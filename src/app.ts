@@ -180,7 +180,12 @@ app.message(async ({ message, say, client }) => {
     replyText += formatSources(response.sources);
     
     console.log('Sending reply:', replyText);
-    await say({ text: replyText, mrkdwn: true });
+    await say({ 
+      text: replyText, 
+      mrkdwn: true,
+      unfurl_links: false,
+      unfurl_media: false
+    });
   } catch (error) {
     console.error('=== Query Error ===');
     if (error instanceof Error) {
