@@ -14,17 +14,30 @@ function cleanupMarkdown(text: string): string {
 }
 
 /**
- * Format sources with a maximum of 15 sources
+ * Escape special characters for Slack text formatting
+ */
+function escapeSlackText(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')   // Must be first to avoid double-escaping
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Format sources with a maximum of 9 sources
  */
 function formatSources(sources: Array<{ url: string; title: string }>) {
   if (!sources || sources.length === 0) return '';
   
-  // Take only the first 15 sources
-  const limitedSources = sources.slice(0, 15);
+  // Take only the first 9 sources
+  const limitedSources = sources.slice(0, 9);
   
   let sourcesText = '\n\n*Sources:*';
   limitedSources.forEach(source => {
-    sourcesText += `\n• <${source.url}|${source.title}>`;
+    const escapedTitle = escapeSlackText(source.title);
+    sourcesText += `\n• <${source.url}|${escapedTitle}>`;
   });
   
   return sourcesText;
